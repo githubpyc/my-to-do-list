@@ -18,10 +18,10 @@ class NewVisitorTest(unittest.TestCase):
 
         self.assertIn('To-Do List', self.browser.title)
 
-        head_text = self.browser.find_element_by_tag_name('h1').head_text
-        self.assertIn('To Do', head_text)
+        head_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do Lists', head_text)
 
-        inputbox = self.browser.find_element_by_tag_id('id_new_item')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(
             inputbox.get_attribute('placeholder'),
             'Enter a to-do item'
@@ -29,14 +29,15 @@ class NewVisitorTest(unittest.TestCase):
 
         inputbox.send_keys('Buy peacock feathers')
 
-        inputbox.send_keys(Keys_ENTER)
-        sleep(1)
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
 
-        table = self.browser.get_element_by_tag_id('id_new_table')
-        rows = table.find_element_by_tag_name('tr')
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
 
         self.assertTrue(
-            any(row.text == 'Buy peacock feathers' for row in rows)
+            any(row.text == 'Buy peacock feathers' for row in rows),
+            'New to-do item did not apear in table'
         )
 
         self.fail('Test is finished')
