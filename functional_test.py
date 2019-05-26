@@ -32,12 +32,21 @@ class NewVisitorTest(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        table = self.browser.find_element_by_id('id_list_table')
-        rows = table.find_elements_by_tag_name('tr')
+        self.check_for_row_in_tablelist('1: Buy peacock feathers')
 
-        self.assertIn('1: Buy peacock feathers', [row.text for row in rows])
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('Buy one get one free')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
+        self.check_for_row_in_tablelist('2: Buy one get one not free')
 
         self.fail('Test is finished')
+
+    def check_for_row_in_tablelist(self, item_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(item_text, [row.text for row in rows])
+
 
 if __name__ == '__main__':
     unittest.main(warnings='ignore')
